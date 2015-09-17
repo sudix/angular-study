@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+		<script>
+		var app = angular.module('myApp', []);
+
+		app.factory('JsonData', function($http) {
+			return {
+				getSampleData: function() {
+					return $http.get('http://localhost:8080/json')
+						.success(function(data, success, headers, config) {
+							console.log(data);
+							return data;
+						});
+				}
+			}
+		});
+
+		app.controller('myController', [
+			'$scope',
+			'JsonData',
+			function($scope, JsonData) {
+				JsonData.getSampleData().then(function(res) {
+					$scope.items = res.data;
+					$scope.show_loading = false;
+				});
+				$scope.show_loading = true;
+			}
+		]);
+		</script>
+		<title>Controller API connection</title>
+	</head>
+	<body>
+		<h1>Controller API connection</h1>
+		<div ng-app="myApp">
+			<div ng-controller="myController as myCtrl">
+				<div ng-show="show_loading">loading...</div>
+				<li ng-repeat="item in items">
+					{{item.name}} - {{item.age}}
+				</li>
+				<hr><div>{{items | json}}</div><hr>
+			</div>
+		</div>
+
+
+	</body>
+</html>

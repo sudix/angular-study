@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+		<script>
+		var app = angular.module('myApp', []);
+		app.controller('myController', function() {
+			this.message = "Hello!";
+			this.members = [
+				{ "name": "Tanaka", "age": 36},
+				{ "name": "Satou",  "age": 18},
+				{ "name": "Suzuki", "age": 16},
+				{ "name": "Yamada", "age": 42}
+			];
+			this.count = 0;
+			this.inc = function() {this.count++};
+			this.dec = function() {this.count--};
+		});
+		</script>
+		<title>Controller Basic</title>
+	</head>
+	<body>
+		<h1>Controller Basic</h1>
+		<div ng-app="myApp">
+			<div ng-controller="myController as myCtrl">
+				<div>
+					<h4>message</h4>
+					<div>{{myCtrl.message}}</div>
+				</div>
+
+				<div>
+					<h4>list</h4>
+					<div><input type="text" ng-model="searchText"></div>
+					<ul>
+						<li ng-repeat="member in myCtrl.members | filter:searchText | orderBy:'age':true">{{member.name}} {{member.age}}</li>
+					</ul>
+					<div>{{myCtrl.members.length}} members</div>
+				</div>
+
+				<div>
+					<h4>call function</h4>
+					{{myCtrl.count}}
+					<button ng-click="myCtrl.inc()">+1</button>
+					<button ng-click="myCtrl.dec()">-1</button>
+				</div>
+
+				<div>
+					<h4>validation</h4>
+					<form name="myForm" novalidate>
+						<div><input type="text" name="text1" ng-model="sampleText" ng-required="true" ng-minlength=3 ng-maxlength=8></div>
+						<div ng-show="myForm.text1.$error.required">Required!</div>
+						<div ng-show="myForm.text1.$error.minlength">Too short!</div>
+						<div ng-show="myForm.text1.$error.maxlength">Too long!</div>
+					</form>
+				</div>
+
+				<hr>
+				<pre>{{myCtrl | json}}</pre>
+				<hr>
+			</div>
+		</div>
+	</body>
+</html>
